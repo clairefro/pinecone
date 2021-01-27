@@ -12,7 +12,7 @@ yarn install
 
 ```
 cd ..
-node pinecone <input/file/path> [output/file/path]
+node pinecone <input-path> [output-path]
 ```
 
 Go one dir ABOVE pinecone so you can run it pretending it's a binary 🙃.
