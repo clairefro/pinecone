@@ -2,6 +2,7 @@
 
 const fs = require("fs");
 const chalk = require("chalk");
+const slugify = require("slugify");
 
 const info = (...info) => {
 	console.log(chalk.green(info));
@@ -10,7 +11,8 @@ const info = (...info) => {
 info("Reading file...\n");
 
 const sourceFilePath = process.argv[2];
-const outputPath = process.argv[3] || "./TUTORIAL_LEARN.md";
+const outputDir = process.argv[3] || "./TUTORIAL_SECTIONS";
+const outputFullTextFilename = "00_FULL.md";
 
 if (!sourceFilePath) {
 	throw new Error("Must provide source file path as first arg");
@@ -51,10 +53,39 @@ info("Fixing up code highlighting syntax...");
 const originalCodeHighlightRegex = /(```\w+)(\{[\d,-]+\})/g;
 outputText = outputText.replace(originalCodeHighlightRegex, "$1 $2");
 
-info("Cooking up your doctored file at " + outputPath);
+const SECTION_DIR = "./TUTORIAL_SECTIONS";
+
+// remove existing output dir and contents if exists
+if (fs.existsSync(SECTION_DIR)) {
+	fs.rmdirSync(SECTION_DIR, { recursive: true });
+}
+
+fs.mkdirSync(SECTION_DIR);
+
+// write full file
+const fullFilePath = [outputDir, outputFullTextFilename].join("/");
+info("Cooking up your doctored file at " + fullFilePath);
 try {
-	fs.writeFileSync(outputPath, outputText);
+	fs.writeFileSync(fullFilePath, outputText);
 } catch (err) {
 	console.error(err);
 }
+
+// split into sections by H2
+const sections = outputText.split(/^##(?!#)/gm);
+
+sections.forEach((section) => {
+	// write each section to a file in TUTORIAL_SECTIONS
+	// const filename = slugify(section.match(/^.+\n/)) + ".md";
+	const title = section.match(/^.+\n/)[0].replace("#", "").trim();
+	const filename = slugify(title, { lower: true, strict: true }) + ".md";
+	const outPath = [SECTION_DIR, filename].join("/");
+
+	try {
+		fs.writeFileSync(outPath, section);
+	} catch (err) {
+		console.error(err);
+	}
+});
+
 info("Done!");
