@@ -17,11 +17,9 @@ node pinecone <input-path> [output-dir]
 
 Go one dir ABOVE pinecone so you can run it pretending it's a binary 🙃.
 
-Download the latest TUTORIAL.md to your local from (here)[https://raw.githubusercontent.com/redwoodjs/redwoodjs.com/main/TUTORIAL.md]. This will be the input file.
+For the input file, download the latest TUTORIAL.md to your local from [here](https://raw.githubusercontent.com/redwoodjs/redwoodjs.com/main/TUTORIAL.md).
 
-A second optional arg allows you to specifcy the output dir for the converted file (defaults to `./TUORIAL_SECTIONS`)
-
-Inside will be a fulll copy of the converted file `00_FULL.md`, as well as a breakdown by section
+A second optional arg allows you to specifcy the output dir for the converted file and sections (defaults to `./TUORIAL_SECTIONS`). Inside will be a fulll copy of the converted file `00_FULL.md`, as well as a breakdown by section:
 
 ```sh
 TUTORIAL_SECTIONS

@@ -53,14 +53,12 @@ info("Fixing up code highlighting syntax...");
 const originalCodeHighlightRegex = /(```\w+)(\{[\d,-]+\})/g;
 outputText = outputText.replace(originalCodeHighlightRegex, "$1 $2");
 
-const SECTION_DIR = "./TUTORIAL_SECTIONS";
-
 // remove existing output dir and contents if exists
-if (fs.existsSync(SECTION_DIR)) {
-	fs.rmdirSync(SECTION_DIR, { recursive: true });
+if (fs.existsSync(outputDir)) {
+	fs.rmdirSync(outputDir, { recursive: true });
 }
 
-fs.mkdirSync(SECTION_DIR);
+fs.mkdirSync(outputDir);
 
 // write full file
 const fullFilePath = [outputDir, outputFullTextFilename].join("/");
@@ -79,7 +77,7 @@ sections.forEach((section) => {
 	// const filename = slugify(section.match(/^.+\n/)) + ".md";
 	const title = section.match(/^.+\n/)[0].replace("#", "").trim();
 	const filename = slugify(title, { lower: true, strict: true }) + ".md";
-	const outPath = [SECTION_DIR, filename].join("/");
+	const outPath = [outputDir, filename].join("/");
 
 	try {
 		fs.writeFileSync(outPath, section);
