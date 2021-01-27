@@ -1,6 +1,11 @@
 const fs = require("fs");
+const chalk = require("chalk");
 
-console.log("Reading file...");
+const info = (info) => {
+	console.log(chalk.green(info));
+};
+
+info("Reading file...\n");
 
 const sourceFilePath = process.argv[2];
 
@@ -13,4 +18,5 @@ const sourceText = fs.readFileSync(sourceFilePath, "utf8", function (err, data) 
 	return data.toString();
 });
 
-console.log(sourceText.slice(0, 200));
+info("[[ PREVIEW ]]");
+console.log(sourceText.slice(0, 250) + "...");
