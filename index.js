@@ -74,7 +74,6 @@ const sections = outputText.split(/^##(?!#)/gm);
 
 sections.forEach((section) => {
 	// write each section to a file in TUTORIAL_SECTIONS
-	// const filename = slugify(section.match(/^.+\n/)) + ".md";
 	const title = section.match(/^.+\n/)[0].replace("#", "").trim();
 	const filename = slugify(title, { lower: true, strict: true }) + ".md";
 	const outPath = [outputDir, filename].join("/");
