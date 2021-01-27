@@ -42,8 +42,8 @@ outputText = outputText.replace(unclosedImgTagRegex, "$1/$2");
 // 2. convert tutorial internal links to relative paths (https://redwoodjs.com/tutorial/getting-dynamic#creating-a-post-editor -> ./getting-dynamic#creating-a-post-editor -> )
 info("Converting internal tutorial links to relative paths...");
 
-const originalInternalTutorialLinkRegex = /\]\((https:\/\/redwoodjs.com\/tutorial\/)(.+?)\)/g;
-outputText = outputText.replace(originalInternalTutorialLinkRegex, "./$2");
+const originalInternalTutorialLinkRegex = /(\]\()(https:\/\/redwoodjs.com\/tutorial\/)(.+?)\)/g;
+outputText = outputText.replace(originalInternalTutorialLinkRegex, "$1./$3");
 
 // 3. convert line highlight syntax (add a space between lang and {})
 info("Fixing up code highlighting syntax...");
