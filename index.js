@@ -45,15 +45,16 @@ outputText = outputText.replace(unclosedImgTagRegex, "$1/$2");
 // 2. convert tutorial internal links to relative paths (https://redwoodjs.com/tutorial/getting-dynamic#creating-a-post-editor -> ./getting-dynamic#creating-a-post-editor -> )
 info("Converting internal tutorial links to relative paths...");
 
-const originalInternalTutorialLinkRegex = /(\]\()(https:\/\/redwoodjs.com\/tutorial\/)(.+?)\)/g;
-outputText = outputText.replace(originalInternalTutorialLinkRegex, "$1./$3");
-// do the same for relative paths to tutorial and docs pages in orginal 
-const originalRelInternalTutorialLinkRegex = /\((\/tutorial\/)/g;
-outputText = outputText.replace(originalRelInternalTutorialLinkRegex, "(./");
-const originalRelInternalDocsLinkRegex = /\((\/docs\/)/g;
+const originalAbsTutorialLinkRegex = /(\]\()(https:\/\/redwoodjs.com\/tutorial\/)(.+?)\)/g;
+outputText = outputText.replace(originalAbsTutorialLinkRegex, "$1./$3");
+// do the same for relative paths to tutorial 
+const originalRelTutorialLinkRegex = /\((\/tutorial\/)/g;
+outputText = outputText.replace(originalRelTutorialLinkRegex, "(./");
+// any other relative links should be prepended with redwoodjs.com
+const originalRelLinkRegex = /]\((\/.+?\/)/g;
 outputText = outputText.replace(
-  originalRelInternalDocsLinkRegex,
-  "(https://redwoodjs.com/docs/"
+  originalRelLinkRegex,
+  "](https://redwoodjs.com$1"
 );
 
 // 3. convert line highlight syntax (add a space between lang and {})
@@ -95,31 +96,35 @@ try {
 const sections = outputText.split(/^##(?!#)/gm);
 
 sections.forEach((section) => {
-	// write each section to a file in TUTORIAL_SECTIONS
+  // write each section to a file in TUTORIAL_SECTIONS
 
-	// grab title from first #
-	const title = section.match(/^.+\n/)[0].replace("#", "").trim();
-	// remove first line (# title) 
-	section = section.replace(/^.+\n/,"")
+  // grab title from first #
+  const title = section.match(/^.+\n/)[0].replace("#", "").trim();
+  // remove first line (# title)
+  section = section.replace(/^.+\n/, "");
   // 6. Add frontmatter
-  const slugifiedTitle = slugify(title, { lower: true, strict: true });
+  let slugifiedTitle = slugify(title, { lower: true, strict: true });
+  // speciall exception for "nstallation-starting-development"
+  if (title.match(/&/)) {
+    slugifiedTitle = slugifiedTitle.replace(/-and-/, "-");
+  }
   const frontmatter = `---
 id: ${slugifiedTitle}
 title: "${title}"
 sidebar_label: "${title}"
 ---
 `;
-  section = frontmatter + section
+  section = frontmatter + section;
 
-	// build file configs
-	const filename = slugifiedTitle + ".md";
-	const outPath = [outputDir, filename].join("/");
+  // build file configs
+  const filename = slugifiedTitle + ".md";
+  const outPath = [outputDir, filename].join("/");
 
-	try {
-		fs.writeFileSync(outPath, section);
-	} catch (err) {
-		console.error(err);
-	}
+  try {
+    fs.writeFileSync(outPath, section);
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 info("Done!");
