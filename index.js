@@ -51,7 +51,7 @@ outputText = outputText.replace(originalAbsTutorialLinkRegex, "$1./$3");
 const originalRelTutorialLinkRegex = /\((\/tutorial\/)/g;
 outputText = outputText.replace(originalRelTutorialLinkRegex, "(./");
 // any other relative links should be prepended with redwoodjs.com
-const originalRelLinkRegex = /]\((\/.+?\/?.*\))/g;
+const originalRelLinkRegex = /]\((\/.+?\/?.*?\))/g;
 outputText = outputText.replace(
   originalRelLinkRegex,
   "](https://redwoodjs.com$1"
