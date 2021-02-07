@@ -47,6 +47,9 @@ info("Converting internal tutorial links to relative paths...");
 
 const originalInternalTutorialLinkRegex = /(\]\()(https:\/\/redwoodjs.com\/tutorial\/)(.+?)\)/g;
 outputText = outputText.replace(originalInternalTutorialLinkRegex, "$1./$3");
+// do the same for relative paths to tutorial pages in orginal 
+const originalRelInternalTutorialLinkRegex = /\((\/tutorial\/)/g;
+outputText = outputText.replace(originalRelInternalTutorialLinkRegex, "(./");
 
 // 3. convert line highlight syntax (add a space between lang and {})
 info("Fixing up code highlighting syntax...");
