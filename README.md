@@ -48,13 +48,11 @@ TUTORIAL_SECTIONS
 
 This is what changes in the output file
 
-1. close all <img> tags
-2. convert tutorial internal links to relative paths (https://redwoodjs.com/tutorial/getting-dynamic#creating-a-post-editor -> ./getting-dynamic#creating-a-post-editor )
-3. convert code line highlight syntax (add space between lang and {})
-4. split into sections
+1. close all `<img>` tags
+1. convert video container and iframe classes
+1. convert tutorial internal links to relative paths (https://redwoodjs.com/tutorial/getting-dynamic#creating-a-post-editor -> ./getting-dynamic#creating-a-post-editor )
+1. convert dotcom relative paths `(/docs/..)` to absolute paths
+1. convert code line highlight syntax (add space between lang and {})
+1. split into sections
+1. add frontmatter
 
-Below is TODO
-
-- insert frontmatter
-
-- check that the section filenames match those on github...
