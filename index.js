@@ -74,8 +74,23 @@ const sections = outputText.split(/^##(?!#)/gm);
 
 sections.forEach((section) => {
 	// write each section to a file in TUTORIAL_SECTIONS
+
+	// grab title from first #
 	const title = section.match(/^.+\n/)[0].replace("#", "").trim();
-	const filename = slugify(title, { lower: true, strict: true }) + ".md";
+	// remove first line (# title) 
+	section = section.replace(/^.+\n/,"")
+  // add frontmatter
+  const slugifiedTitle = slugify(title, { lower: true, strict: true });
+  const frontmatter = `---
+id: ${slugifiedTitle}
+title: "${title}"
+sidebar_label: "${title}"
+---
+`;
+  section = frontmatter + section
+
+	// build file configs
+	const filename = slugifiedTitle + ".md";
 	const outPath = [outputDir, filename].join("/");
 
 	try {
