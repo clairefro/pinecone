@@ -30,8 +30,9 @@ console.log(sourceText.slice(0, 250) + "...\n");
 // 1. close all <img> tags
 // 2. convert tutorial internal links to relative paths (https://redwoodjs.com/tutorial/getting-dynamic#creating-a-post-editor -> ./getting-dynamic#creating-a-post-editor -> )
 // 3. convert line highlight syntax
-// 4. split into sections
-// 5. insert frontmatter
+// 4. replace video player classes
+// 5. split into sections
+// 6. insert frontmatter
 
 let outputText = sourceText;
 
@@ -53,6 +54,16 @@ info("Fixing up code highlighting syntax...");
 const originalCodeHighlightRegex = /(```\w+)(\{[\d,-]+\})/g;
 outputText = outputText.replace(originalCodeHighlightRegex, "$1 $2");
 
+
+// 4. Replace videoplayer classes
+// <div class="relative pb-9/16 mt-4"> =>  <div class="video-container">
+const videoContainerClassRegex = /(<div class=")(relative.+?)(")/g;
+const newVideoContainerClass = "video-container";
+outputText = outputText.replace(
+  videoContainerClassRegex,
+  `$1${newVideoContainerClass}$3`
+);
+
 // remove existing output dir and contents if exists
 if (fs.existsSync(outputDir)) {
 	fs.rmdirSync(outputDir, { recursive: true });
@@ -69,7 +80,7 @@ try {
 	console.error(err);
 }
 
-// split into sections by H2
+// 5. Split into sections by H2
 const sections = outputText.split(/^##(?!#)/gm);
 
 sections.forEach((section) => {
@@ -79,7 +90,7 @@ sections.forEach((section) => {
 	const title = section.match(/^.+\n/)[0].replace("#", "").trim();
 	// remove first line (# title) 
 	section = section.replace(/^.+\n/,"")
-  // add frontmatter
+  // 6. Add frontmatter
   const slugifiedTitle = slugify(title, { lower: true, strict: true });
   const frontmatter = `---
 id: ${slugifiedTitle}
