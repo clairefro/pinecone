@@ -60,9 +60,12 @@ outputText = outputText.replace(originalCodeHighlightRegex, "$1 $2");
 const videoContainerClassRegex = /(<div class=")(relative.+?)(")/g;
 const newVideoContainerClass = "video-container";
 outputText = outputText.replace(
-  videoContainerClassRegex,
+	videoContainerClassRegex,
   `$1${newVideoContainerClass}$3`
 );
+// remove classes from iframes 
+const iframeClassRegex = /(<iframe.+?)(class=".+?"\s?)/g;
+outputText = outputText.replace(iframeClassRegex, "$1")
 
 // remove existing output dir and contents if exists
 if (fs.existsSync(outputDir)) {
